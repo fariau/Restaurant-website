@@ -9,14 +9,21 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2">
+    <style>
+        .s-arch {
+            width: 100%;
+            max-width: 400px
+        }
+    </style>
 </head>
 
 <body>
 
     <nav class="s-nav">
-        <div class="s-wrap"><a class="s-brand" href="#top"><span class="s-mark"><img src="image.png" alt="" width="96"
-                        height="96"></span>Chaupal</a>
+        <div class="s-wrap"><a class="s-brand"
+                href="#top"><!-- LOGO IMAGE: put your logo in the same folder and name it logo.png --><span
+                    class="s-mark"><img src="logo.png" alt="" width="96" height="96"></span>Chaupal</a>
             <div class="s-links"><a href="#menu">Buffet</a><a href="#about">The spread</a><a href="#visit">Visit</a><a
                     href="#faq">FAQ</a></div><button class="s-btn" data-chat="book a table">Book a table</button>
         </div>
@@ -38,8 +45,8 @@
                 </div>
             </div>
             <div class="s-arch">
-                <!-- IMAGE: put your photo in the same folder as this file and name it image.png (used for hero and logo) --><img
-                    class="s-dish" src="image.png"
+                <!-- HERO IMAGE: put your hero photo in the same folder as this file and name it hero.png --><img
+                    class="s-dish" src="hero.png"
                     alt="A bowl of rich red curry with white rice, garnished with fresh coriander" width="640"
                     height="640"><span class="s-float" style="top:14%;left:-8%">BBQ</span><span class="s-float"
                     style="top:46%;right:-10%">Seafood</span><span class="s-float"
@@ -240,7 +247,7 @@
     <footer class="s-foot">
         <div class="s-wrap">
             <div class="s-fgrid">
-                <div><a class="s-brand" href="#top"><span class="s-mark"><img src="image.png" alt="" width="96"
+                <div><a class="s-brand" href="#top"><span class="s-mark"><img src="logo.png" alt="" width="96"
                                 height="96"></span>Chaupal</a>
                     <p>Open-air desi exotic buffet. Dinner, weekend brunch and hi-tea.</p>
                 </div>
@@ -258,7 +265,7 @@
     <button id="launch" aria-label="Open chat assistant">💬 Chat with us</button>
     <div class="app" id="chat" role="dialog" aria-label="Chat assistant">
         <header>
-            <div class="logo"><img src="image.png" alt="" width="96" height="96"></div>
+            <div class="logo"><img src="logo.png" alt="" width="96" height="96"></div>
             <div>
                 <h1>Chaupal</h1><small><i></i>Dinner daily · 7 PM – 12 AM</small>
             </div><button class="cartbtn" id="cartbtn">🛒 <span id="cc">0</span></button><button class="cartbtn x"
