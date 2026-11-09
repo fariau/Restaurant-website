@@ -8,184 +8,156 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap">
-    <link rel="stylesheet" href="style.css?v=2">
-    <style>
-        .s-arch {
-            width: 100%;
-            max-width: 400px
-        }
-    </style>
+        href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="style.css?v=4">
 </head>
 
 <body>
-
-    <nav class="s-nav">
-        <div class="s-wrap"><a class="s-brand"
-                href="#top"><!-- LOGO IMAGE: put your logo in the same folder and name it logo.png --><span
-                    class="s-mark"><img src="logo.png" alt="" width="96" height="96"></span>Chaupal</a>
-            <div class="s-links"><a href="#menu">Buffet</a><a href="#about">The spread</a><a href="#visit">Visit</a><a
-                    href="#faq">FAQ</a></div><button class="s-btn" data-chat="book a table">Book a table</button>
+    <nav class="nav">
+        <div class="w"><a class="brand" href="#top"><!-- LOGO: put your logo in this folder and name it logo.png --><img
+                    src="logo.png" alt="">Chaupal</a>
+            <div class="links"><a href="#menu">Buffet</a><a href="#about">Spread</a><a href="#visit">Visit</a><a
+                    href="#faq">FAQ</a></div><button class="btn" data-chat="I would like to book a table">Book a
+                table</button>
         </div>
     </nav>
 
-    <section class="s-hero" id="top">
-        <div class="s-wrap">
+    <header class="hero" id="top">
+        <div class="w">
             <div>
-                <span class="s-eyebrow">● Open-air desi exotic buffet · Karachi</span>
-                <h1>Gather around the <em>feast</em>.</h1>
-                <p class="s-lead">BBQ, desi favourites, Chinese, seafood and desserts, laid out buffet-style for family
-                    dinners, weekend brunch and hi-tea.</p>
-                <div class="s-cta"><button class="s-btn" data-chat="book a table">Reserve a table</button><button
-                        class="s-btn ghost" data-chat="menu">See buffet prices</button></div>
-                <div class="s-stats">
-                    <div><b>7 PM – 12 AM</b><span>Dinner, every day</span></div>
-                    <div><b>Rs 2,900</b><span>Adult dinner + tax</span></div>
-                    <div><b>Rs 1,399</b><span>Kids 4–7 + tax</span></div>
-                </div>
+                <span class="tag">Open daily · Dinner 7 PM – 12 AM</span>
+                <h1>All you can <mark>feast</mark>.</h1>
+                <p class="lead">Open-air desi exotic buffet in Karachi. BBQ, desi favourites, Chinese, seafood and
+                    desserts, all on one table.</p>
+                <div class="cta"><button class="btn" data-chat="I would like to book a table">Book a table
+                        →</button><button class="btn alt" data-chat="How much is the buffet?">See prices</button></div>
             </div>
-            <div class="s-arch">
-                <!-- HERO IMAGE: put your hero photo in the same folder as this file and name it hero.png --><img
-                    class="s-dish" src="hero.png"
-                    alt="A bowl of rich red curry with white rice, garnished with fresh coriander" width="640"
-                    height="640"><span class="s-float" style="top:14%;left:-8%">BBQ</span><span class="s-float"
-                    style="top:46%;right:-10%">Seafood</span><span class="s-float"
-                    style="bottom:10%;left:-4%">Desserts</span></div>
+            <div class="pic"><!-- HERO IMAGE: put your hero photo in this folder and name it hero.png --><img
+                    src="hero.png" alt="A bowl of rich red curry with white rice">
+                <div class="stk s1"><small>Dinner from</small>Rs 2,900</div>
+                <div class="stk s2"><small>Kids 4–7</small>Rs 1,399</div>
+            </div>
         </div>
-    </section>
+    </header>
 
-    <div class="s-strip">
-        <div class="s-wrap">
-            <span>BBQ</span><i>✦</i><span>Desi</span><i>✦</i><span>Chinese</span><i>✦</i><span>Seafood</span><i>✦</i><span>Vegetarian</span><i>✦</i><span>Desserts</span>
+    <div class="tick">
+        <div>
+            <span>BBQ</span><span>✦</span><span>Desi</span><span>✦</span><span>Chinese</span><span>✦</span><span>Seafood</span><span>✦</span><span>Vegetarian</span><span>✦</span><span>Desserts</span><span>✦</span><span>BBQ</span><span>✦</span><span>Desi</span><span>✦</span><span>Chinese</span><span>✦</span><span>Seafood</span><span>✦</span><span>Vegetarian</span><span>✦</span><span>Desserts</span><span>✦</span>
         </div>
     </div>
 
-    <section class="s-sec" id="menu">
-        <div class="s-wrap">
-            <div class="s-head"><span class="s-eyebrow">Buffet &amp; prices</span>
-                <h2>Choose your buffet</h2>
-                <p>Three ways to feast. Prices are per person, plus tax.</p>
-            </div>
-            <div class="s-prices">
-                <div class="s-pcard"><span class="s-badge">Every day</span>
-                    <div class="ic">🍽️</div>
+    <section class="sec" id="menu">
+        <div class="w"><span class="eyebrow">Buffet &amp; prices</span>
+            <h2>Pick your feast</h2>
+            <p class="sub">Three buffets, one price per person. Tax is added on top.</p>
+            <div class="cards">
+                <div class="card y"><span class="days">Every day</span>
                     <h3>Dinner</h3>
-                    <p class="s-slots">7:00 – 9:00 PM<br>9:30 PM – 12:00 AM</p>
-                    <div class="s-prow"><span>Adult</span><b>Rs 2,900</b><button class="s-mini"
-                            data-chat="1 dinner buffet">+ Add</button></div>
-                    <div class="s-prow"><span>Child (4–7)</span><b>Rs 1,399</b><button class="s-mini"
-                            data-chat="1 child dinner">+ Add</button></div>
+                    <p class="slots">7:00 – 9:00 PM<br>9:30 PM – 12:00 AM</p>
+                    <div class="pr"><span>Adult</span><b>Rs 2,900</b></div>
+                    <div class="pr"><span>Child (4–7)</span><b>Rs 1,399</b></div><button class="btn"
+                        data-chat="I would like to book a table for dinner">Book dinner →</button>
                 </div>
-                <div class="s-pcard"><span class="s-badge">Sat – Sun</span>
-                    <div class="ic">🥞</div>
-                    <h3>Weekend brunch</h3>
-                    <p class="s-slots">10:00 AM – 12:00 PM<br>12:00 – 2:00 PM</p>
-                    <div class="s-prow"><span>Adult</span><b>Rs 1,899</b><button class="s-mini" data-chat="1 brunch">+
-                            Add</button></div>
-                    <div class="s-prow"><span>Child (4–7)</span><b>Rs 1,099</b><button class="s-mini"
-                            data-chat="1 child brunch">+ Add</button></div>
+                <div class="card o"><span class="days">Sat – Sun</span>
+                    <h3>Brunch</h3>
+                    <p class="slots">10:00 AM – 12:00 PM<br>12:00 – 2:00 PM</p>
+                    <div class="pr"><span>Adult</span><b>Rs 1,899</b></div>
+                    <div class="pr"><span>Child (4–7)</span><b>Rs 1,099</b></div><button class="btn"
+                        data-chat="I would like to book a table for brunch">Book brunch →</button>
                 </div>
-                <div class="s-pcard"><span class="s-badge">Fri – Sun</span>
-                    <div class="ic">🫖</div>
+                <div class="card g"><span class="days">Fri – Sun</span>
                     <h3>Hi-Tea</h3>
-                    <p class="s-slots">4:00 – 6:00 PM</p>
-                    <div class="s-prow"><span>Adult</span><b>Rs 1,638</b><button class="s-mini" data-chat="1 hi-tea">+
-                            Add</button></div>
-                    <div class="s-prow"><span>Child (4–7)</span><b>Rs 999</b><button class="s-mini"
-                            data-chat="1 child hi-tea">+ Add</button></div>
+                    <p class="slots">4:00 – 6:00 PM</p>
+                    <div class="pr"><span>Adult</span><b>Rs 1,638</b></div>
+                    <div class="pr"><span>Child (4–7)</span><b>Rs 999</b></div><button class="btn"
+                        data-chat="I would like to book a table for hi-tea">Book hi-tea →</button>
                 </div>
             </div>
-            <p class="s-note">Prices and timings come from public listings and can change. Please confirm when you book.
+            <p class="note">Prices and timings come from public listings and can change. Please confirm when you book.
             </p>
         </div>
     </section>
 
-    <section class="s-sec s-alt" id="about">
-        <div class="s-wrap s-split">
-            <div><span class="s-eyebrow">The spread</span>
-                <h2>Something for every plate</h2>
-                <p>Come hungry. The buffet runs from charcoal BBQ to slow-cooked desi dishes, with Chinese, seafood and
-                    a full dessert counter, all served in an open-air setting.</p>
-                <ul class="s-checks">
-                    <li>Open-air family dining</li>
-                    <li>Vegetarian dishes every visit</li>
-                    <li>Kids’ prices for ages 4–7</li>
-                </ul>
-            </div>
-            <div class="s-tiles">
-                <div class="s-tile">
-                    <div class="e">🍢</div>
-                    <h4>BBQ</h4>
-                    <p>Chicken tikka, beef bihari kabab, malai boti</p>
+    <section class="sec" id="about">
+        <div class="w"><span class="eyebrow">The spread</span>
+            <h2>Every plate, covered</h2>
+            <p class="sub">The line-up rotates through the week, so call ahead if you are set on a particular dish.</p>
+            <div class="bento">
+                <div class="tile big"><span class="n">01</span>
+                    <div>
+                        <h3>BBQ</h3>
+                        <p>Chicken tikka, beef bihari kabab, malai boti</p>
+                    </div>
                 </div>
-                <div class="s-tile">
-                    <div class="e">🍲</div>
-                    <h4>Desi</h4>
-                    <p>Nihari, paya, jalfrezi, qeema</p>
+                <div class="tile"><span class="n">02</span>
+                    <div>
+                        <h3>Desi</h3>
+                        <p>Nihari, paya, jalfrezi, qeema</p>
+                    </div>
                 </div>
-                <div class="s-tile">
-                    <div class="e">🥡</div>
-                    <h4>Chinese</h4>
-                    <p>Chicken manchurian and more</p>
+                <div class="tile"><span class="n">03</span>
+                    <div>
+                        <h3>Chinese</h3>
+                        <p>Chicken manchurian and more</p>
+                    </div>
                 </div>
-                <div class="s-tile">
-                    <div class="e">🦐</div>
-                    <h4>Seafood</h4>
-                    <p>Prawns and fried fish</p>
+                <div class="tile"><span class="n">04</span>
+                    <div>
+                        <h3>Seafood</h3>
+                        <p>Prawns and fried fish</p>
+                    </div>
                 </div>
-                <div class="s-tile">
-                    <div class="e">🥬</div>
-                    <h4>Vegetarian</h4>
-                    <p>Chana and aloo tarkari, salads</p>
+                <div class="tile"><span class="n">05</span>
+                    <div>
+                        <h3>Veggie</h3>
+                        <p>Chana and aloo tarkari, salads</p>
+                    </div>
                 </div>
-                <div class="s-tile">
-                    <div class="e">🍮</div>
-                    <h4>Desserts</h4>
-                    <p>Kheer, kulfi, ice cream, jelly</p>
+                <div class="tile wide"><span class="n">06</span>
+                    <div>
+                        <h3>Desserts</h3>
+                        <p>Kheer, kulfi, ice cream, jelly</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="s-sec">
-        <div class="s-wrap">
-            <div class="s-head"><span class="s-eyebrow">How it works</span>
-                <h2>From craving to table in three steps</h2>
-            </div>
-            <div class="s-how">
-                <div>
-                    <h3>Pick your buffet</h3>
-                    <p>Choose dinner, brunch or hi-tea, and add adults and kids.</p>
+    <section class="sec">
+        <div class="w"><span class="eyebrow">How it works</span>
+            <h2>Three steps. That’s it.</h2>
+            <p class="sub"></p>
+            <div class="how">
+                <div><b>1</b>
+                    <h3>Pick a buffet</h3>
+                    <p>Dinner, brunch or hi-tea, for adults and kids.</p>
                 </div>
-                <div>
-                    <h3>Reserve a table</h3>
-                    <p>Chat with our assistant to choose your day, slot and party size.</p>
+                <div><b>2</b>
+                    <h3>Chat to book</h3>
+                    <p>Tell our assistant the day, time and how many of you.</p>
                 </div>
-                <div>
-                    <h3>Arrive hungry</h3>
+                <div><b>3</b>
+                    <h3>Show up hungry</h3>
                     <p>Pay at the restaurant. Prices are per person, plus tax.</p>
                 </div>
             </div>
-            <p style="text-align:center;margin:34px 0 0"><button class="s-btn" data-chat="book a table">Start
-                    booking</button></p>
         </div>
     </section>
 
-    <section class="s-sec s-alt" id="visit">
-        <div class="s-wrap">
-            <div class="s-head"><span class="s-eyebrow">Visit us</span>
-                <h2>Timings &amp; contact</h2>
-            </div>
-            <div class="s-two">
-                <div class="s-box">
+    <section class="sec" id="visit">
+        <div class="w"><span class="eyebrow">Visit us</span>
+            <h2>Timings &amp; contact</h2>
+            <p class="sub"></p>
+            <div class="two">
+                <div class="box">
                     <h3>Timings</h3>
-                    <table class="s-hours">
+                    <table class="hours">
                         <tr>
                             <td>Dinner (daily)</td>
                             <td>7–9 PM · 9:30 PM–12 AM</td>
                         </tr>
                         <tr>
-                            <td>Weekend brunch (Sat–Sun)</td>
+                            <td>Brunch (Sat–Sun)</td>
                             <td>10 AM–12 PM · 12–2 PM</td>
                         </tr>
                         <tr>
@@ -194,23 +166,22 @@
                         </tr>
                     </table>
                 </div>
-                <div class="s-box">
+                <div class="box">
                     <h3>Find us</h3>
-                    <p><b>Karsaz and Seaview branches</b>Karachi</p>
+                    <p><b>Karsaz &amp; Seaview branches</b>Karachi</p>
                     <p><b>Seaview</b>0304-1110024</p>
-                    <p><b>Karsaz</b>0300 3716888</p><button class="s-btn" data-chat="book a table">Reserve a
+                    <p><b>Karsaz</b>0300 3716888</p><button class="btn" data-chat="I would like to book a table">Book a
                         table</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="s-sec" id="faq">
-        <div class="s-wrap">
-            <div class="s-head"><span class="s-eyebrow">FAQ</span>
-                <h2>Good to know</h2>
-            </div>
-            <div class="s-faq">
+    <section class="sec" id="faq">
+        <div class="w"><span class="eyebrow">FAQ</span>
+            <h2>Good to know</h2>
+            <p class="sub"></p>
+            <div class="faq">
                 <details>
                     <summary>Are the prices inclusive of tax?</summary>
                     <p>No. Buffet prices are per person and tax is added on top.</p>
@@ -222,7 +193,7 @@
                 <details>
                     <summary>Is there vegetarian food?</summary>
                     <p>Yes, the buffet includes vegetarian dishes such as chana and aloo tarkari, plus salads and
-                        desserts. The line-up rotates, so call ahead if you’re after something specific.</p>
+                        desserts. The line-up rotates, so call ahead if you are after something specific.</p>
                 </details>
                 <details>
                     <summary>Can I order takeaway?</summary>
@@ -236,45 +207,29 @@
         </div>
     </section>
 
-    <section class="s-band">
-        <div class="s-wrap">
-            <h2>Ready for a feast?</h2>
-            <p>Reserve your table in under a minute.</p><button class="s-btn" data-chat="book a table">Reserve a
-                table</button>
+    <section class="band">
+        <div class="w">
+            <h2>Ready to eat?</h2><button class="btn" data-chat="I would like to book a table">Book a table →</button>
         </div>
     </section>
 
-    <footer class="s-foot">
-        <div class="s-wrap">
-            <div class="s-fgrid">
-                <div><a class="s-brand" href="#top"><span class="s-mark"><img src="logo.png" alt="" width="96"
-                                height="96"></span>Chaupal</a>
-                    <p>Open-air desi exotic buffet. Dinner, weekend brunch and hi-tea.</p>
-                </div>
-                <div>
-                    <h5>Explore</h5><a href="#menu">Buffet &amp; prices</a><a href="#about">The spread</a><a
-                        href="#visit">Timings &amp; contact</a><a href="#faq">FAQ</a>
-                </div>
-                <div>
-                    <h5>Contact</h5><a href="#visit">Seaview: 0304-1110024</a><a href="#visit">Karsaz: 0300 3716888</a>
-                </div>
-            </div>
-            <div class="s-copy">© 2026 Chaupal. Prices exclude tax and may change.</div>
+    <footer class="foot">
+        <div class="w"><a class="brand" href="#top"><img src="logo.png" alt="">Chaupal</a>
+            <nav><a href="#menu">Buffet</a><a href="#about">Spread</a><a href="#visit">Visit</a><a href="#faq">FAQ</a>
+            </nav>
+            <div class="copy">© 2026 Chaupal. Prices exclude tax and may change.</div>
         </div>
     </footer>
-    <button id="launch" aria-label="Open chat assistant">💬 Chat with us</button>
-    <div class="app" id="chat" role="dialog" aria-label="Chat assistant">
-        <header>
-            <div class="logo"><img src="logo.png" alt="" width="96" height="96"></div>
-            <div>
-                <h1>Chaupal</h1><small><i></i>Dinner daily · 7 PM – 12 AM</small>
-            </div><button class="cartbtn" id="cartbtn">🛒 <span id="cc">0</span></button><button class="cartbtn x"
+
+    <button class="btn" id="launch" aria-label="Open chat assistant">Chat with us</button>
+    <div class="chat" id="chat" role="dialog" aria-label="Chaupal assistant">
+        <div class="chat-h"><img src="logo.png" alt="">
+            <div><b>Chaupal Assistant</b><small>Ask about prices, timings or book a table</small></div><button
                 id="closebtn" aria-label="Close chat">✕</button>
-        </header>
-        <div id="log" aria-live="polite"></div>
-        <div class="quick" id="quick"></div>
-        <form id="f" autocomplete="off"><input id="in" placeholder="Ask anything, e.g. “2 dinner buffet”"
-                aria-label="Message"><button class="send">Send</button></form>
+        </div>
+        <div class="chat-log" id="log" aria-live="polite"></div>
+        <form class="chat-f" id="f" autocomplete="off"><input id="in" placeholder="Type your message…"
+                aria-label="Message"><button>Send</button></form>
     </div>
     <script src="script.js"></script>
 </body>

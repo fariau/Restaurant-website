@@ -1,117 +1,178 @@
-const MENU=[
-{c:'Dinner',e:'🍽️',n:'Dinner Buffet · Adult',d:'Daily · 7–9 PM and 9:30 PM–12 AM',p:2900,t:[]},
-{c:'Dinner',e:'🧒',n:'Dinner Buffet · Child (4–7)',d:'Daily · 7–9 PM and 9:30 PM–12 AM',p:1399,t:[]},
-{c:'Brunch',e:'🥞',n:'Weekend Brunch · Adult',d:'Sat–Sun · 10 AM–12 PM and 12–2 PM',p:1899,t:[]},
-{c:'Brunch',e:'🧒',n:'Weekend Brunch · Child (4–7)',d:'Sat–Sun · 10 AM–12 PM and 12–2 PM',p:1099,t:[]},
-{c:'Hi-Tea',e:'🫖',n:'Hi-Tea · Adult',d:'Fri–Sun · 4–6 PM',p:1638,t:[]},
-{c:'Hi-Tea',e:'🧒',n:'Hi-Tea · Child (4–7)',d:'Fri–Sun · 4–6 PM',p:999,t:[]}];
-const ALIAS={0:'dinner',1:'child dinner|kids dinner|kid dinner|dinner child|dinner kid',2:'brunch',3:'child brunch|kids brunch|kid brunch|brunch child|brunch kid',4:'hi-tea|hi tea|high tea|hitea',5:'child hi-tea|kids hi-tea|kid hi-tea|child hi tea|kids hi tea|child high tea|kids high tea'};
-const CATS=[...new Set(MENU.map(m=>m.c))],CATE={Dinner:'🍽️',Brunch:'🥞','Hi-Tea':'🫖'};
-const NUM={a:1,an:1,one:1,two:2,three:3,four:4,five:5,six:6};
-const cart={};let flow=null,lastOrder=null;
-const log=document.getElementById('log'),inp=document.getElementById('in');
-const rs=n=>'Rs '+n.toLocaleString('en-US');
-const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-const sub=()=>Object.entries(cart).reduce((s,[i,q])=>s+MENU[i].p*q,0);
-const fee=m=>m==='Pickup'||sub()>=3000?0:150;
-function count(){const n=Object.values(cart).reduce((a,b)=>a+b,0);document.getElementById('cc').textContent=n;return n}
-function down(){log.scrollTop=log.scrollHeight}
-function chipRow(arr,fn){const w=document.createElement('div');w.className='chips';arr.forEach(c=>{const b=document.createElement('button');b.className='chip';b.textContent=c;b.onclick=()=>fn(c);w.appendChild(b)});return w}
-function say(html,chips,wide){const d=document.createElement('div');d.className='m bot'+(wide?' wide':'');d.innerHTML='<span class="dots"><i></i><i></i><i></i></span>';log.appendChild(d);down();
- setTimeout(()=>{d.innerHTML=typeof html==='function'?'':html;if(typeof html==='function')html(d);if(chips)d.appendChild(chipRow(chips,send));down()},420);return d}
-function me(t){const d=document.createElement('div');d.className='m usr';d.textContent=t;log.appendChild(d);down()}
-const MAIN=['📖 Buffet prices','🪑 Book a table','🕒 Timings','🛒 Cart'];
-const q=document.getElementById('quick');q.appendChild(chipRow(['📖 Buffet prices','🪑 Book a table','🛒 Cart','🕒 Timings','📞 Contact'],send));
+/* Chaupal assistant: plain conversation, no buttons or option lists. */
+const MEALS = {
+  dinner: { n: 'dinner', a: 2900, k: 1399, t: 'every day, 7 to 9 PM and again from 9:30 PM to midnight' },
+  brunch: { n: 'weekend brunch', a: 1899, k: 1099, t: 'Saturday and Sunday, 10 AM to 12 PM and 12 to 2 PM' },
+  hitea: { n: 'Hi-Tea', a: 1638, k: 999, t: 'Friday to Sunday, 4 to 6 PM' }
+};
+const NUMW = { a: 1, an: 1, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
+const DAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+const rs = n => 'Rs ' + n.toLocaleString('en-US');
+const cap = s => s.replace(/\b\w/g, c => c.toUpperCase());
+const join = a => a.length > 1 ? a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1] : (a[0] || '');
+let sel = {}, bk = null;
 
-function add(i,n=1){cart[i]=(cart[i]||0)+n;if(cart[i]<=0)delete cart[i];count()}
-function menuCard(el,cat,filter){el.innerHTML='';el.classList.add('wide');
- const tabs=document.createElement('div');tabs.className='tabs';
- ['All',...CATS].forEach(c=>{const b=document.createElement('button');b.className='chip'+(c===(filter||cat)?' on':'');b.textContent=(CATE[c]||'')+' '+c;b.onclick=()=>menuCard(el,c);tabs.appendChild(b)});
- el.appendChild(tabs);
- const list=MENU.map((m,i)=>[m,i]).filter(([m])=>cat==='All'||m.c===cat||(cat==='Vegetarian'&&m.t.includes('veg'))||(cat==='Popular'&&m.t.includes('pop')));
- list.forEach(([m,i])=>{const r=document.createElement('div');r.className='item';
-  r.innerHTML=`<div class="emo">${m.e}</div><div class="t"><b>${m.n}</b>${m.t.includes('veg')?'<span class="tag">veg</span>':''}${m.t.includes('spicy')?'<span class="tag">🌶 spicy</span>':''}<p>${m.d}</p><div class="price">${rs(m.p)} <small style="color:var(--mute);font-weight:400">per person + tax</small></div></div>`;
-  const b=document.createElement('button');b.className='add';b.textContent='Add';b.onclick=()=>{add(i);b.textContent='✓ Added';b.classList.add('done');setTimeout(()=>{b.textContent='Add';b.classList.remove('done')},900)};
-  r.appendChild(b);el.appendChild(r)});
- el.appendChild(chipRow(['🛒 View cart','🪑 Reserve with these'],send));}
-function showMenu(cat='All'){say(el=>{menuCard(el,cat)},null,true)}
-function cartCard(el,mode){el.innerHTML='';el.classList.add('wide');
- if(!count()){el.innerHTML='Your selection is empty. Browse the buffet options or type something like <i>“2 dinner buffet and 1 child dinner”</i>.';el.appendChild(chipRow(['📖 Buffet prices'],send));return}
- el.insertAdjacentHTML('beforeend','<b>Your buffet selection</b>');
- Object.entries(cart).forEach(([i,qty])=>{const r=document.createElement('div');r.className='row';
-  r.innerHTML=`<div>${MENU[i].e} ${MENU[i].n}<br><small style="color:var(--mute)">${rs(MENU[i].p)} each</small></div>`;
-  const s=document.createElement('div');s.className='step';s.innerHTML=`<button aria-label="Remove one">−</button><span>${qty}</span><button aria-label="Add one">+</button>`;
-  s.children[0].onclick=()=>{add(+i,-1);cartCard(el)};s.children[2].onclick=()=>{add(+i);cartCard(el)};r.appendChild(s);el.appendChild(r)});
- const f=fee();el.insertAdjacentHTML('beforeend',`<div class="sum"><div class="row big"><span>Estimate (excl. tax)</span><span>${rs(sub())}</span></div></div>`);
- el.appendChild(chipRow(['🪑 Reserve with these','➕ Add more','🗑 Clear cart'],send));down()}
-function showCart(){say(el=>cartCard(el),null,true)}
+/* ---------- selection of buffets typed in plain text ---------- */
+const mealOf = t => /dinner/.test(t) ? 'dinner' : /brunch/.test(t) ? 'brunch' : /hi-?\s?tea|high tea/.test(t) ? 'hitea' : null;
+function parseSel(t) {
+  if (!/\d|\b(one|two|three|four|five|six|seven|eight|nine|ten)\b/.test(t)) return null;
+  const out = {}; let last = null, any = false;
+  t.replace(/[,&]|\band\b|\bplus\b/g, '|').split('|').forEach(seg => {
+    const own = mealOf(seg), m = own || last; if (!m) return;
+    if (!own && !/kid|child|adult|person|people|guest/.test(seg)) return;
+    const dm = seg.match(/\d+/), wm = seg.split(/\s+/).find(w => NUMW[w]);
+    const q = dm ? +dm[0] : (wm ? NUMW[wm] : 0); if (!q) return;
+    const k = /kid|child|little/.test(seg) ? 'k' : 'a';
+    out[m] = out[m] || { a: 0, k: 0 }; out[m][k] += Math.min(q, 30); last = m; any = true
+  });
+  return any ? out : null
+}
+const desc = s => join(Object.entries(s).flatMap(([m, v]) => [v.a && `${v.a} adult ${MEALS[m].n}${v.a > 1 ? 's' : ''}`, v.k && `${v.k} child ${MEALS[m].n}${v.k > 1 ? 's' : ''}`].filter(Boolean)));
+const total = s => Object.entries(s).reduce((x, [m, v]) => x + v.a * MEALS[m].a + v.k * MEALS[m].k, 0);
+const heads = s => Object.values(s).reduce((x, v) => x + v.a + v.k, 0);
+function merge(s) { for (const [m, v] of Object.entries(s)) { sel[m] = sel[m] || { a: 0, k: 0 }; sel[m].a += v.a; sel[m].k += v.k } }
 
-function parseItems(t){let any=false;const words=t.replace(/[,&]|\band\b/g,'|').split('|');
- words.forEach(seg=>{seg=seg.trim();if(!seg)return;let best=-1,len=0;
-  Object.entries(ALIAS).forEach(([i,al])=>al.split('|').forEach(a=>{if(seg.includes(a)&&a.length>len){best=+i;len=a.length}}));
-  if(best<0)return;let n=1;const dm=seg.match(/\d+/);if(dm)n=Math.min(+dm[0],20);else{const w=seg.split(/\s+/).find(x=>NUM[x]);if(w)n=NUM[w]}
-  add(best,n);any=true;(parseItems.got=parseItems.got||[]).push(`${n} × ${MENU[best].n}`)});return any}
+/* ---------- reading day, time, guests from free text ---------- */
+const SERVICE = [[10, 14, 'brunch'], [16, 18, 'hi-tea'], [19, 24, 'dinner']];
+const mealAt = h => (SERVICE.find(([a, b]) => h >= a && h < b) || [])[2];
+const fmt = (h, m) => (h % 12 || 12) + ':' + String(m).padStart(2, '0') + ' ' + (h >= 12 && h < 24 ? 'PM' : 'AM');
+const onDay = d => d === 'Today' ? 'today' : d === 'Tomorrow' ? 'tomorrow' : 'on ' + d;
+function getDate(t) {
+  if (/\b(today|tonight)\b/.test(t)) return 'Today';
+  if (/\btomorrow\b/.test(t)) return 'Tomorrow';
+  let m = t.match(/\b(sunday|monday|tuesday|wednesday|thursday|friday|saturday|sun|mon|tues?|wed|thu|thurs?|fri|sat)\b/);
+  if (m) return cap(DAYS.find(d => d.startsWith(m[1].slice(0, 3))));
+  m = t.match(/\b(\d{1,2})(?:st|nd|rd|th)?\s*(?:of\s*)?(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*/);
+  if (m) return (+m[1]) + ' ' + cap(m[2]);
+  m = t.match(/\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s*(\d{1,2})\b/);
+  return m ? (+m[2]) + ' ' + cap(m[1]) : null
+}
+function getTime(t) {
+  let m = t.match(/\b(\d{1,2})(?::(\d{2}))?\s*(a\.?m\.?|p\.?m\.?)/i);
+  if (m) { let h = (+m[1]) % 12; if (/p/i.test(m[3])) h += 12; return { h, m: +(m[2] || 0) } }
+  if (/\bnoon\b/.test(t)) return { h: 12, m: 0 };
+  m = t.match(/\bat\s*(\d{1,2})(?::(\d{2}))?\b/i) || (bk && bk.ask === 'time' && t.match(/^\s*(\d{1,2})(?::(\d{2}))?\s*$/));
+  if (m) { const h = +m[1], mi = +(m[2] || 0); if (h >= 1 && h <= 9) return { h: h + 12, m: mi }; if (h === 12) return { h: 12, m: mi }; if (h === 10 || h === 11) return { amb: h, m: mi } }
+  return null
+}
+function getGuests(t) {
+  const w = 'one|two|three|four|five|six|seven|eight|nine|ten';
+  let m = t.match(/(?:for|party of|group of|table of|total of)\s*(\d{1,2})\b(?!\s*(?::\d|a\.?m|p\.?m|o'clock))/i) || t.match(/\b(\d{1,2})\s*(?:people|persons|person|guests|pax|of us|adults)/i) || t.match(new RegExp('(?:for|party of)\\s*(' + w + ')\\b', 'i'));
+  if (!m && bk && bk.ask === 'guests') m = t.match(/^\s*(\d{1,2})\s*$/) || t.match(new RegExp('^\\s*(' + w + ')\\s*$', 'i'));
+  if (!m) return null; const n = NUMW[m[1].toLowerCase()] || +m[1]; return n > 12 ? -1 : n
+}
 
-const cartLine=()=>Object.entries(cart).map(([i,q])=>q+' × '+MENU[i].n).join(', ');
-/* flows */
-const days=()=>[0,1,2,3].map(o=>{const d=new Date();d.setDate(d.getDate()+o);return o===0?'Today':o===1?'Tomorrow':d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})});
-function startRes(){flow={t:'res',s:0,d:{}};say('I’d love to get you a table. <b>Which day</b> are you thinking?',days())}
-function startOrder(){if(!count())return showCart();startRes()}
-const phoneOk=t=>t.replace(/\D/g,'').length>=10;
-function run(raw){const t=raw.toLowerCase().trim(),f=flow,d=f.d;
- if(/^(cancel|stop|exit|never ?mind|go back)/.test(t)){flow=null;return say('No problem, I’ve cancelled that. What else can I help with?',MAIN)}
- const yes=/^(y|yes|yeah|confirm|ok|sure|correct)/.test(t);
- if(f.t==='res'){
-  if(f.s===0){d.date=raw;f.s=1;say('Lovely. <b>What time</b>?',['10:00 AM (brunch)','12:00 PM (brunch)','4:00 PM (hi-tea)','7:00 PM (dinner)','9:30 PM (dinner)'])}
-  else if(f.s===1){d.time=raw;f.s=2;say('<b>How many guests</b>?',['1','2','4','6','8'])}
-  else if(f.s===2){const n=parseInt(t);if(!n||n<1)return say('Please give me a number of guests, like 4.');if(n>12)return say('For parties over 12, please call us so we can arrange seating. Could you try a smaller number?');d.g=n;f.s=3;say('And your <b>name</b>?')}
-  else if(f.s===3){d.name=raw;f.s=4;say(`Thanks, ${esc(raw)}. What’s the best <b>phone number</b> for the booking?`)}
-  else if(f.s===4){if(!phoneOk(t))return say('That number looks too short. Could you re-enter it with at least 10 digits?');d.ph=raw;f.s=5;
-   say(`<b>Please check your booking</b><div class="kv"><span>Name</span><b>${esc(d.name)}</b><span>Date</span><b>${esc(d.date)}</b><span>Time</span><b>${esc(d.time)}</b><span>Guests</span><b>${d.g}</b><span>Phone</span><b>${esc(d.ph)}</b>${count()?`<span>Buffet</span><b>${cartLine()}</b><span>Estimate</span><b>${rs(sub())} + tax</b>`:''}</div>Shall I confirm?`,['Yes, confirm','Cancel'])}
-  else if(f.s===5){if(yes){const id='TBL-'+Math.floor(1000+Math.random()*9000);const bk=count()?'<br>Buffet: '+cartLine()+' (estimate '+rs(sub())+' + tax, paid at the restaurant)':'';Object.keys(cart).forEach(k=>delete cart[k]);count();flow=null;say(`<div class="ok">✓ Table confirmed</div>Reference <b>${id}</b>${bk}<br>We’ll see you ${esc(d.date)} at ${esc(d.time)}, ${esc(d.name)}. Your table is held for 15 minutes past the booking time.`,['📖 Menu','🛒 Cart'])}else say('Reply “yes” to confirm, or “cancel”.',['Yes, confirm','Cancel'])}
- }else{
-  if(f.s===0){d.mode=/pick/.test(t)?'Pickup':'Delivery';f.s=1;say('Who’s the order for? Your <b>name</b>, please.')}
-  else if(f.s===1){d.name=raw;f.s=2;say('And a <b>phone number</b> in case we need to reach you?')}
-  else if(f.s===2){if(!phoneOk(t))return say('That number looks too short. Could you re-enter it with at least 10 digits?');d.ph=raw;if(d.mode==='Delivery'){f.s=3;say('What’s the full <b>delivery address</b>?')}else{f.s=4;say('How would you like to pay?',['Cash','Card at counter'])}}
-  else if(f.s===3){if(raw.length<8)return say('Could you add a bit more detail, like house number, street and area?');d.addr=raw;f.s=4;say('How would you like to pay?',['Cash on delivery','Card on delivery'])}
-  else if(f.s===4){d.pay=raw;f.s=5;say(el=>{const f2=fee(d.mode);let h='<b>Order summary</b>';Object.entries(cart).forEach(([i,qn])=>h+=`<div class="row"><span>${qn} × ${MENU[i].n}</span><span>${rs(MENU[i].p*qn)}</span></div>`);
-    h+=`<div class="sum"><div class="row"><span>Delivery</span><span>${f2?rs(f2):'Free'}</span></div><div class="row big"><span>Total</span><span>${rs(sub()+f2)}</span></div></div><div class="kv"><span>${d.mode}</span><b>${esc(d.name)}, ${esc(d.ph)}</b>${d.addr?`<span>Address</span><b>${esc(d.addr)}</b>`:''}<span>Payment</span><b>${esc(d.pay)}</b></div>Place this order?`;
-    el.classList.add('wide');el.innerHTML=h;el.appendChild(chipRow(['Yes, place order','Cancel'],send))},null,true)}
-  else if(f.s===5){if(yes||/place/.test(t)){const id='ORD-'+Math.floor(10000+Math.random()*90000),tot=sub()+fee(d.mode);Object.keys(cart).forEach(k=>delete cart[k]);count();flow=null;lastOrder={id,mode:d.mode};
-   say(el=>{el.classList.add('wide');el.innerHTML=`<div class="ok">✓ Order placed</div>Order <b>${id}</b> · ${rs(tot)} · ${esc(d.pay)}<br>Estimated ${d.mode==='Delivery'?'45 minutes':'25 minutes'}.<div class="track"><div class="on">Received</div><div>Preparing</div><div>${d.mode==='Delivery'?'On the way':'Ready'}</div><div>${d.mode==='Delivery'?'Delivered':'Collected'}</div></div>`;
-    const st=[...el.querySelectorAll('.track div')];let k=1;const iv=setInterval(()=>{if(k>=st.length)return clearInterval(iv);st[k++].classList.add('on')},6000)})}
-   else say('Reply “yes” to place the order, or “cancel”.',['Yes, place order','Cancel'])}}}
+/* ---------- table booking, filled from whatever the guest says ---------- */
+function fill(t) {
+  const d = bk.d, got = [];
+  const dt = getDate(t); if (dt && dt !== d.date) { d.date = dt; got.push(dt.toLowerCase() === 'today' || dt === 'Tomorrow' ? dt.toLowerCase() : dt) }
+  const tm = getTime(t);
+  if (tm) { if (tm.amb) { bk.amb = { h: tm.amb, m: tm.m }; bk.ask = 'time' } else { const meal = mealAt(tm.h); if (!meal) bk.bad = true; else { d.time = fmt(tm.h, tm.m); d.meal = meal; got.push(d.time) } } }
+  const g = getGuests(t);
+  if (g === -1) bk.big = true; else if (g && g !== d.guests) { d.guests = g; got.push(g + (g > 1 ? ' guests' : ' guest')) }
+  const pm = t.match(/\+?\d[\d\s-]{8,}\d/);
+  if (pm && pm[0].replace(/\D/g, '').length >= 10) { d.phone = pm[0].trim(); got.push('your number') }
+  return got
+}
+function summary() {
+  const d = bk.d;
+  return `Here is your booking: a table for ${d.guests} ${onDay(d.date)} at ${d.time} (${d.meal}), under the name ${d.name}, phone ${d.phone}.` +
+    (Object.keys(sel).length ? ` Your buffet selection is ${desc(sel)}, about ${rs(total(sel))} plus tax, paid at the restaurant.` : '') +
+    ' Shall I confirm it? Reply yes to confirm, or tell me what to change.'
+}
+function next(got) {
+  const d = bk.d, pre = got && got.length ? 'Got it, ' + join(got) + '. ' : '';
+  if (bk.bad) { bk.bad = false; return pre + 'We seat guests during our meal times: brunch from 10 AM to 2 PM on weekends, Hi-Tea from 4 to 6 PM Friday to Sunday, and dinner from 7 PM to midnight. What time works for you?' }
+  if (bk.big) { bk.big = false; return pre + 'For parties above 12, please call the branch so they can arrange seating. If you are 12 or fewer, how many guests will there be?' }
+  if (bk.amb) { bk.ask = 'time'; return pre + `Is that ${bk.amb.h} AM or ${bk.amb.h} PM?` }
+  if (!d.date) { bk.ask = 'date'; return pre + 'Which day would you like to come in?' }
+  if (!d.time) { bk.ask = 'time'; return pre + 'What time suits you? Dinner starts at 7 PM, brunch is 10 AM to 2 PM on weekends, and Hi-Tea is 4 to 6 PM Friday to Sunday.' }
+  if (!d.guests) { bk.ask = 'guests'; return pre + 'How many guests will there be?' }
+  if (!d.name) { bk.ask = 'name'; return pre + 'Lovely. What name should I put the booking under?' }
+  if (!d.phone) { bk.ask = 'phone'; return pre + 'And a phone number we can reach you on?' }
+  bk.ask = 'confirm'; return pre + summary()
+}
+function finish() {
+  const d = bk.d, id = 'TBL-' + (1000 + Math.floor(Math.random() * 9000));
+  const msg = `You are all set, ${d.name.split(' ')[0]}. Your reference is ${id}: a table for ${d.guests} ${onDay(d.date)} at ${d.time}. We hold tables for 15 minutes after the booking time, and your buffet is paid for at the restaurant. See you soon!`;
+  bk = null; sel = {}; return msg
+}
+function step(t) {
+  if (/^(cancel|stop|never ?mind|forget it|exit)\b/.test(t)) { bk = null; return 'No problem, I have cancelled that. Is there anything else I can help with?' }
+  if (bk.ask === 'confirm') {
+    if (/^(y|yes|yeah|yep|confirm|ok|okay|sure|correct|go ahead)\b/.test(t)) return finish();
+    const got = fill(t); if (got.length || bk.bad || bk.big) return next(got);
+    if (/^no\b/.test(t)) { bk = null; return 'Okay, I have not booked anything. Tell me whenever you are ready and we will start again.' }
+    return faq(t) || 'I was not sure what to change. Reply yes to confirm, or tell me the new day, time or number of guests.'
+  }
+  if (bk.amb) {
+    const a = bk.amb, am = /\b(am|morning)\b/.test(t), pm = /\b(pm|night|evening|dinner)\b/.test(t);
+    if (am || pm) {
+      const h = a.h + (pm ? 12 : 0), meal = mealAt(h); bk.amb = null;
+      if (!meal) { bk.bad = true; return next([]) }
+      bk.d.time = fmt(h, a.m); bk.d.meal = meal; return next([bk.d.time])
+    }
+  }
+  const got = fill(t);
+  if (!got.length && !bk.amb && !bk.bad && !bk.big && bk.ask === 'name') {
+    const n = t.replace(/^(my name is|i am|i'm|this is|it's|its|name is|call me)\s+/i, '').trim();
+    if (/^[a-z][a-z .'-]{1,40}$/i.test(n)) { bk.d.name = cap(n); got.push('the name ' + bk.d.name) }
+  }
+  if (got.length || bk.amb || bk.bad || bk.big) return next(got);
+  const f = faq(t); return (f ? f + '\n\n' : 'I did not quite catch that. ') + next([])
+}
 
-function route(raw){const t=raw.toLowerCase().trim();if(!t)return;if(flow)return run(raw);
- if(/clear.*cart|empty.*cart|remove all/.test(t)){Object.keys(cart).forEach(k=>delete cart[k]);count();return say('Your cart is now empty.',['📖 Menu'])}
- if(/\b(table|reserv|book)/.test(t))return startRes();
- if(/\d|\b(one|two|three|four|five|six)\b/.test(t)){parseItems.got=[];if(parseItems(t)){say(`Added <b>${parseItems.got.join(', ')}</b> to your selection.`,null);return showCart()}}
- if(/track|where.*order|order status/.test(t))return say(lastOrder?`Your order <b>${lastOrder.id}</b> is being prepared. It will be with you shortly.`:'You don’t have an active order yet. Ready to place one?',['📖 Menu']);
- if(/checkout|place.*order|^(✅ )?order$|i want to order|ready to order/.test(t))return startOrder();
- if(/\b(cart|basket)\b/.test(t))return showCart();
- if(/add more/.test(t))return showMenu();
+/* ---------- answers to common questions, in plain sentences ---------- */
+function faq(t) {
+  if (/price|cost|how much|rate|fee|per head|charge|worth/.test(t)) {
+    const s = parseSel(t);
+    if (s) return `For ${desc(s)}, it comes to about ${rs(total(s))} plus tax, paid at the restaurant.`;
+    const m = mealOf(t);
+    if (m) { const x = MEALS[m]; return `${cap(x.n)} is ${rs(x.a)} per adult and ${rs(x.k)} for kids aged 4 to 7, plus tax. It is served ${x.t}.` }
+    return 'Prices are per person, plus tax. Dinner is Rs 2,900 for adults and Rs 1,399 for kids aged 4 to 7. Weekend brunch is Rs 1,899 and Rs 1,099. Hi-Tea is Rs 1,638 and Rs 999. Tell me how many of each you would like and I will work out the total.'
+  }
+  if (/hour|open|close|timing|time|when|slot|late/.test(t)) return 'Dinner runs every day from 7 to 9 PM and again from 9:30 PM until midnight. Weekend brunch is Saturday and Sunday, 10 AM to 12 PM and 12 to 2 PM. Hi-Tea is Friday to Sunday, 4 to 6 PM.';
+  if (/veg|no meat|salad/.test(t)) return 'Yes, there are vegetarian dishes such as chana and aloo tarkari, plus salads and desserts. The line-up rotates, so it is worth calling the branch if you need something specific.';
+  if (/spread|menu|food|dish|serve|bbq|what.*(have|eat|on)|offer|kabab|nihari|dessert/.test(t)) return 'Expect charcoal BBQ like chicken tikka, beef bihari kabab and malai boti, desi dishes such as nihari, paya and jalfrezi, Chinese like chicken manchurian, prawns and fried fish, vegetarian dishes, and a dessert counter with kheer, kulfi, ice cream and jelly. The spread changes through the week.';
+  if (/kid|child|toddler|age/.test(t)) return 'Kids’ prices apply to children aged 4 to 7: Rs 1,399 for dinner, Rs 1,099 for brunch and Rs 999 for Hi-Tea, plus tax. For children outside that range, please check with the branch.';
+  if (/pay|cash|card|tax|gst|bill/.test(t)) return 'Buffet prices are per person plus tax, and you settle the bill at the restaurant after your meal.';
+  if (/contact|phone|call|number|address|location|where|branch|direction|karsaz|seaview/.test(t)) return 'You can call Seaview on 0304-1110024 or Karsaz on 0300 3716888. Both branches are in Karachi.';
+  if (/takeaway|take away|deliver|parcel|order online|catering/.test(t)) return 'Chaupal is a dine-in buffet. For takeaway or catering, please call the branch directly.';
+  if (/thank|shukr/.test(t)) return 'You are very welcome! Anything else I can help with?';
+  if (/who are you|are you (a )?(bot|human|real)|your name/.test(t)) return 'I am Chaupal’s virtual assistant. I can answer questions about prices, timings and the spread, and take a table booking.';
+  if (/\bhelp\b|what can you/.test(t)) return 'I can tell you our buffet prices and timings, what is on the spread, and book you a table. You can also say something like “2 dinner and 1 child dinner” and I will work out the cost.';
+  return null
+}
+function reply(raw) {
+  const t = raw.toLowerCase().trim();
+  if (bk) return step(t);
+  if (/^(hi|hello|hey|salam|assalam|aoa|good (morning|afternoon|evening))\b/.test(t)) return 'Hello, welcome to Chaupal! I can tell you about our buffet prices, timings and what is on the spread, or book you a table. What would you like to know?';
+  if (/\b(table|reserv|booking|book)\b/.test(t)) {
+    bk = { d: {}, ask: null }; const g = heads(sel); if (g) bk.d.guests = g;
+    const m = mealOf(t); const got = fill(t); const r = next(got);
+    return (got.length ? '' : m ? `Happy to book you in for ${MEALS[m].n}. ` : 'Happy to help with that. ') + r
+  }
+  const s = parseSel(t);
+  if (s && !/\b(when|what time|timing|hours|open|close)\b/.test(t)) {
+    if (/price|cost|how much|total|worth/.test(t)) return `For ${desc(s)}, it comes to about ${rs(total(s))} plus tax, paid at the restaurant.`;
+    merge(s); return `Noted, ${desc(sel)}. That comes to about ${rs(total(sel))} plus tax, paid at the restaurant. Would you like me to reserve a table for that? Just tell me the day and time, for example “tomorrow at 8 PM”.`
+  }
+  return faq(t) || 'I am not sure about that one, but I can help with buffet prices, timings, what is on the spread, or booking a table. For anything else, please call Seaview on 0304-1110024 or Karsaz on 0300 3716888.'
+}
 
- if(/popular|best|recommend|suggest|favou?rite|special|spread|bbq|what.*(food|dishes|served)/.test(t))return say('Guests love the <b>BBQ</b> (chicken tikka, beef bihari kabab, malai boti), desi favourites like <b>nihari and haleem</b>, plus Chinese, seafood and desserts such as kheer. The spread changes, so call us to confirm what’s on today.',['📖 Buffet prices','🪑 Book a table']);
- if(/veg(etarian|gie)?\b|no meat/.test(t))return say('The buffet includes vegetarian dishes such as <b>chana and aloo tarkari</b>, plus salads and desserts. The line-up rotates, so please call to confirm.',['📖 Buffet prices']);
- if(/menu|buffet|price|cost|per head|how much|rate|food/.test(t))return showMenu();
- if(/hour|open|close|timing|when|slot/.test(t))return say('<b>Dinner</b> (daily): 7–9 PM and 9:30 PM–12 AM<br><b>Weekend brunch</b> (Sat–Sun): 10 AM–12 PM and 12–2 PM<br><b>Hi-Tea</b> (Fri–Sun): 4–6 PM',MAIN);
- if(/contact|phone|call|address|location|where/.test(t))return say('Call <b>0304-1110024</b> (Seaview) or <b>0300 3716888</b> (Karsaz) to reserve or ask about the day’s spread.',MAIN);
- if(/deliver|takeaway|take away|shipping/.test(t))return say('Chaupal is a <b>dine-in buffet</b>. For takeaway or catering enquiries, please call us.',MAIN);
- if(/pay|cash|card|tax/.test(t))return say('Buffet prices are <b>per person plus tax</b> and are settled at the restaurant.',MAIN);
- if(/^(hi|hello|hey|salam|assalam|good (morning|afternoon|evening))/.test(t))return say('Hello, and welcome to <b>Chaupal</b>! 😊 How can I help you today?',MAIN);
- if(/thank/.test(t))return say('You’re very welcome! Anything else I can get you?',MAIN);
- if(/help|what can you/.test(t))return say('I can show <b>buffet prices</b> and <b>timings</b>, and <b>book a table</b>. You can also type things like <i>“2 dinner buffet and 1 child dinner”</i>.',MAIN);
- parseItems.got=[];if(parseItems(t)){const g=parseItems.got.join(', ');say(`Added <b>${g}</b> to your cart.`,null);return showCart()}
- say('Sorry, I didn’t quite catch that. Here’s what I can help with:',MAIN)}
-function send(t){const c=t.replace(/^[^\w“"]+\s*/,'')||t;me(c);route(c)}
-document.getElementById('f').onsubmit=e=>{e.preventDefault();const v=inp.value.trim();if(!v)return;inp.value='';me(v);route(v)};
-document.getElementById('cartbtn').onclick=()=>{flow=null;me('Cart');showCart()};
-say('Welcome to <b>Chaupal</b> 👋 I can show buffet prices and timings, or book you a table. What would you like to do?',MAIN);
-
-const chat=document.getElementById('chat'),launch=document.getElementById('launch');
-function openChat(msg){chat.classList.add('open');launch.classList.add('hide');if(msg)send(msg);else inp.focus()}
-function closeChat(){chat.classList.remove('open');launch.classList.remove('hide')}
-launch.onclick=()=>openChat();
-document.getElementById('closebtn').onclick=closeChat;
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeChat()});
-document.querySelectorAll('[data-chat]').forEach(b=>b.onclick=()=>openChat(b.dataset.chat));
+/* ---------- chat window ---------- */
+const log = document.getElementById('log'), inp = document.getElementById('in'), chat = document.getElementById('chat'), launch = document.getElementById('launch');
+const down = () => { log.scrollTop = log.scrollHeight };
+function add(cls, text) { const d = document.createElement('div'); d.className = 'msg ' + cls; d.textContent = text; log.appendChild(d); down(); return d }
+function botSay(text) {
+  const d = add('bot', ''); d.innerHTML = '<span class="dots"><i></i><i></i><i></i></span>'; down();
+  setTimeout(() => { d.textContent = text; down() }, Math.min(450 + text.length * 6, 1400))
+}
+function send(t) { add('usr', t); botSay(reply(t)) }
+function openChat(msg) { chat.classList.add('open'); launch.classList.add('hide'); if (msg) send(msg); else inp.focus() }
+function closeChat() { chat.classList.remove('open'); launch.classList.remove('hide') }
+document.getElementById('f').onsubmit = e => { e.preventDefault(); const v = inp.value.trim(); if (!v) return; inp.value = ''; send(v) };
+launch.onclick = () => openChat();
+document.getElementById('closebtn').onclick = closeChat;
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeChat() });
+document.querySelectorAll('[data-chat]').forEach(b => b.onclick = () => openChat(b.dataset.chat));
+botSay('Hi there, and welcome to Chaupal! Ask me about buffet prices, timings or what is on the spread, or tell me when you would like a table and I will book it.');
