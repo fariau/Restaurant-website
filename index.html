@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap">
-    <link rel="stylesheet" href="style.css?v=4">
+    <link rel="stylesheet" href="style.css?v=5">
 </head>
 
 <body>
@@ -26,14 +26,16 @@
         <div class="w">
             <div>
                 <span class="tag">Open daily · Dinner 7 PM – 12 AM</span>
-                <h1>All you can <mark>feast</mark>.</h1>
+                <h1><span class="kw"><i style="--i:0">All</i></span> <span class="kw"><i style="--i:1">you</i></span>
+                    <span class="kw"><i style="--i:2">can</i></span> <mark class="kw"><i style="--i:3">feast</i></mark>.
+                </h1>
                 <p class="lead">Open-air desi exotic buffet in Karachi. BBQ, desi favourites, Chinese, seafood and
                     desserts, all on one table.</p>
                 <div class="cta"><button class="btn" data-chat="I would like to book a table">Book a table
                         →</button><button class="btn alt" data-chat="How much is the buffet?">See prices</button></div>
             </div>
-            <div class="pic"><!-- HERO IMAGE: put your hero photo in this folder and name it hero.png --><img
-                    src="hero.png" alt="A bowl of rich red curry with white rice">
+            <div class="pic"><!-- HERO IMAGE: put your hero photo in this folder and name it hero.png -->
+                <div class="plate"><img src="hero.png" alt="A bowl of rich red curry with white rice"></div>
                 <div class="stk s1"><small>Dinner from</small>Rs 2,900</div>
                 <div class="stk s2"><small>Kids 4–7</small>Rs 1,399</div>
             </div>
@@ -231,7 +233,7 @@
         <form class="chat-f" id="f" autocomplete="off"><input id="in" placeholder="Type your message…"
                 aria-label="Message"><button>Send</button></form>
     </div>
-    <script src="script.js"></script>
+    <script src="script.js?v=5"></script>
 </body>
 
 </html>

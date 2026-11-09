@@ -176,3 +176,37 @@ document.getElementById('closebtn').onclick = closeChat;
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeChat() });
 document.querySelectorAll('[data-chat]').forEach(b => b.onclick = () => openChat(b.dataset.chat));
 botSay('Hi there, and welcome to Chaupal! Ask me about buffet prices, timings or what is on the spread, or tell me when you would like a table and I will book it.');
+
+/* ---------- motion: reveal on scroll, kinetic headings, 3D tilt, ticker speed, price count-up, progress bar ---------- */
+(() => {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.querySelectorAll('.sec h2,.band h2').forEach(h => {
+    const label = h.textContent.trim(); h.classList.add('kh'); h.setAttribute('aria-label', label);
+    h.innerHTML = label.split(/\s+/).map((w, i) => `<span class="kw" aria-hidden="true"><i style="--i:${i}">${w}</i></span>`).join(' ')
+  });
+  function count(card) {
+    card.querySelectorAll('.pr b').forEach(b => {
+      const n = +b.textContent.replace(/\D/g, ''); if (!n) return; const t0 = performance.now();
+      (function f(t) { const k = Math.min((t - t0) / 900, 1), e = 1 - Math.pow(1 - k, 3); b.textContent = 'Rs ' + Math.round(n * e).toLocaleString('en-US'); if (k < 1) requestAnimationFrame(f) })(t0)
+    })
+  }
+  const show = el => { el.classList.add('in'); if (el.matches('.card')) count(el) };
+  const targets = document.querySelectorAll('.kh,.eyebrow,.sub,.card,.tile,.how>div,.box,.faq details,.note');
+  if (!('IntersectionObserver' in window)) { targets.forEach(show); }
+  else {
+    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { show(e.target); io.unobserve(e.target) } }), { threshold: .12, rootMargin: '0px 0px -5% 0px' });
+    targets.forEach(el => { if (!el.classList.contains('kh')) { el.classList.add('rv'); el.style.setProperty('--d', ([...el.parentNode.children].indexOf(el) % 4) * 90 + 'ms') } io.observe(el) })
+  }
+  const pic = document.querySelector('.pic'), hero = document.querySelector('.hero');
+  hero.addEventListener('pointermove', e => {
+    if (e.pointerType !== 'mouse') return;
+    const r = pic.getBoundingClientRect(), cl = v => Math.max(-1, Math.min(1, v));
+    pic.style.setProperty('--px', cl((e.clientX - (r.left + r.width / 2)) / (innerWidth / 2)).toFixed(3));
+    pic.style.setProperty('--py', cl((e.clientY - (r.top + r.height / 2)) / (innerHeight / 2)).toFixed(3))
+  });
+  hero.addEventListener('pointerleave', () => { pic.style.setProperty('--px', 0); pic.style.setProperty('--py', 0) });
+  const tk = document.querySelector('.tick div'), anim = tk && tk.getAnimations && tk.getAnimations()[0]; let lastY = scrollY, boost = 0;
+  (function loop() { boost = boost * .92 + Math.abs(scrollY - lastY) * .35; lastY = scrollY; if (anim) anim.playbackRate = 1 + Math.min(boost, 12); requestAnimationFrame(loop) })();
+  const bar = document.createElement('div'); bar.className = 'prog'; document.body.appendChild(bar);
+  addEventListener('scroll', () => { const m = document.documentElement.scrollHeight - innerHeight; bar.style.transform = `scaleX(${m > 0 ? scrollY / m : 0})` }, { passive: true });
+})();
